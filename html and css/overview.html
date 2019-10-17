@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+	<title>DATS 6401 - Individual Project</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script type="text/javascript"
+			src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+</head>
+
+<body>
+	<div class="content">
+	<div id="main">
+		<div id="header">
+			<div id="logo">
+				<div id="logo_text">
+					<h1><a href="index.html">
+							Military, Health, Education Spending 
+					    </a></h1>
+					<h2>Top 12 Countries</h2>
+				</div><!-- logo_text -->
+			</div><!--logo-->
+			<div id="menubar">
+				<ul id="menu">
+					<li><a href="index.html">Home</a></li>
+					<li  class="selected"><a href="overview.html">Overview</a></li>
+					<li><a href="Spending vs GPD.html">Spending vs GPD</a></li>
+					<li><a href="Per person value.html">Per person value</a></li>
+					<li><a href="Spending Trends.html">Spending Trends</a></li>
+					<li><a href="summary.html">Summary</a></li>
+				</ul>
+			</div><!--menubar-->
+		</div><!-- header-->
+
+			<div id="content">
+				<!--insert page content here-->
+
+				<h1>Map of Military Spending for top 12 Countries</h1>
+					<div id="military_spending_div" style="width: 900px; height: 600px;"></div>
+					<p></p>
+				<h2>Map of Health Spending for top 12 Countries</h2>
+					<div id="health_spending_div" style="width: 900px; height: 600px;"></div>
+					<p></p>
+				<h3>Map of Education Spending Analysis for top 12 Countries</h3>
+					<div id="education_spending_div" style="width: 900px; height: 600px;"></div>
+				<h4> Total Average Spending of top 12 Countries</h4>
+					<div id="mean_spending_div" style="width: 1000px; height: 600px;"></div>
+			</div><!--content-->
+			
+		</div><!--site_content-->
+		</div>
+		<footer class="footer">
+			<div id="footer">
+				 <script>
+					var d=new Date(); document.write(d.getFullYear());
+				</script>
+				| DATS6401 Project | &reg; Danlei Qian | The George Washington University |
+			</div><!--footer-->
+		</div><!--content_footer-->
+	</div><!-- main -->
+</body>
+
+<script type="text/javascript">
+
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawAllSheets);
+		
+		function drawAllSheets() {
+			drawSheetName('mean_spending', 'SELECT A,B',
+						  MilitarySpendingResponseHandler);
+			drawSheetName('mean_spending', 'SELECT A,C',
+						  HealthSpendingResponseHandler);
+			drawSheetName('mean_spending', 'SELECT A,D',
+						  EducationSpendingResponseHandler);
+			drawSheetName('mean_spending', 'SELECT A,B,C,D',
+						  MeanSpendingResponseHandler);
+
+		} //drawAllSheets
+		
+		function drawSheetName(sheetName, query, responseHandler) {
+			var queryString = encodeURIComponent(query);
+			var query = new google.visualization.Query(
+				'https://docs.google.com/spreadsheets/d/1Jck68DzHZ1tT3vT3LD72HeCB4duIgrzKXw3kNRlJGuE/gviz/tq?sheet=' + sheetName + '&headers=1&tq=' +queryString  
+			);
+			
+			query.send(responseHandler);
+		} //drawSheetNames
+		
+
+		function MilitarySpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			
+			//set the options
+			var options = {
+					height: 400,
+					colorAxis: {colors: ['#e7711c', '#4374e0']}, //orange to blue
+					title: 'Geochart of Top 12 Countries'
+			};
+			var chart = new google.visualization.GeoChart(document.getElementById('military_spending_div'));
+			chart.draw(data, options);
+			
+			
+		} // Military spending map
+
+		function HealthSpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			
+			//set the options
+			var options = {
+					height: 400,
+					colorAxis: {colors: ['#e7711c', '#4374e0']}, //orange to blue
+					title: 'Geochart of Top 12 Countries'
+			};
+			var chart = new google.visualization.GeoChart(document.getElementById('health_spending_div'));
+			chart.draw(data, options);
+			
+			
+		} //Health spending map
+
+
+		function EducationSpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			
+			//set the options
+			var options = {
+					height: 400,
+					colorAxis: {colors: ['#e7711c', '#4374e0']}, //orange to blue
+					title: 'Geochart of Top 12 Countries'
+			};
+			
+
+			var chart = new google.visualization.GeoChart(document.getElementById('education_spending_div'));
+			chart.draw(data, options);
+			
+			
+		}; //Education spending map
+
+
+		function MeanSpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 1, desc:true});
+
+			var options = {
+        			title: 'Average Spending of Top 12 countries',
+        			chartArea: {width: '300%',left:100,right:200},
+        			isStacked: true,
+        			hAxis: {title: 'Average Spending', minValue: 0},
+        			vAxis: {title: 'Countries'}
+
+     		};
+
+			var chart = new google.visualization.BarChart(document.getElementById('mean_spending_div'));
+			chart.draw(data, options);
+			
+			
+		}; //stacked bar- mean total spending
+	
+	</script>
+
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+	<title>DATS 6401 - Individual Project</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script type="text/javascript"
+			src="https://www.gstatic.com/charts/loader.js"></script>
+
+</head>
+
+<body>
+	<div class="content">
+	<div id="main">
+		<div id="header">
+			<div id="logo">
+				<div id="logo_text">
+					<h1><a href="index.html">
+							Military, Health, Education Spending 
+					    </a></h1>
+					<h2>Top 12 Countries</h2>
+				</div><!-- logo_text -->
+			</div><!--logo-->
+			<div id="menubar">
+				<ul id="menu">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="overview.html">Overview</a></li>
+					<li><a href="Spending vs GPD.html">Spending vs GPD</a></li>
+					<li class="selected"><a href="Per person value.html">Per person value</a></li>
+					<li><a href="Spending Trends.html">Spending Trends</a></li>
+					<li><a href="summary.html">Summary</a></li>
+				</ul>
+			</div><!--menubar-->
+		</div><!-- header-->
+
+			<div id="content">
+				<!--insert page content here-->
+				<h1>Military Spending Analysis</h1>
+				
+					<div id="MilitaryGDP_PP_div" style="width: 1400px; height: 800px;"></div>
+					<p></p>
+				<h2>Health Spending Analysis</h2>
+					<div id="HealthGDP_PP_div" style="width: 1400px; height: 800px;"></div>
+					<p></p>
+				<h3>Education Spending Analysis</h2>
+					<div id="EducationGDP_PP_div" style="width: 1400px; height: 800px;"></div>
+
+			</div><!--content-->
+			
+		</div><!--site_content-->
+		</div>
+		<footer class="footer">
+			<div id="footer">
+				 <script>
+					var d=new Date(); document.write(d.getFullYear());
+				</script>
+				| DATS6401 Project | &reg; Danlei Qian | The George Washington University |
+			</div><!--footer-->
+		</div><!--content_footer-->
+	</div><!-- main -->
+</body>
+
+
+ <script type="text/javascript">
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawAllSheets);
+		
+		function drawAllSheets() {
+			drawSheetName('PP Sum', 'SELECT A,B,C,D,E',
+						  MilitaryGDPPPResponseHandler);
+			drawSheetName('PP Sum', 'SELECT A,F,C,D,E',
+						  HealthGDPPPResponseHandler);
+			drawSheetName('PP Sum', 'SELECT A,G,C,D,E',
+						  EducationGDPPPResponseHandler);
+
+		} //drawAllSheets
+		
+		function drawSheetName(sheetName, query, responseHandler) {
+			var queryString = encodeURIComponent(query);
+			var query = new google.visualization.Query(
+				'https://docs.google.com/spreadsheets/d/1Jck68DzHZ1tT3vT3LD72HeCB4duIgrzKXw3kNRlJGuE/gviz/tq?sheet=' + sheetName + '&headers=1&tq=' +queryString  
+			);
+			
+			query.send(responseHandler);
+		} //drawSheetNames
+
+
+	    function MilitaryGDPPPResponseHandler(response) {
+
+	      var data = response.getDataTable();
+
+	      var options = {
+	        title: 'Military Spending per person ' +
+	               'and GDP per person (2012-2016)',
+	        hAxis: {title: 'Military Spending Per Person'},
+	        vAxis: {title: 'Gdp Per Person'},
+	        bubble: {textStyle: {fontSize: 10,auraColor: 'none'}}      };
+
+	      var chart = new google.visualization.BubbleChart(document.getElementById('MilitaryGDP_PP_div'));
+	      chart.draw(data, options);
+	    }
+
+
+	    function HealthGDPPPResponseHandler(response) {
+
+	      var data = response.getDataTable();
+
+	      var options = {
+
+	        title: 'Health Spending per person ' +
+	               'and GDP per person (2012-2016)',
+	        hAxis: {title: 'Health Spending Per Person'},
+	        vAxis: {title: 'Gdp Per Person'},
+	        bubble: {textStyle: {fontSize: 10,auraColor: 'none'}}      };
+
+	      var chart = new google.visualization.BubbleChart(document.getElementById('HealthGDP_PP_div'));
+	      chart.draw(data, options);
+	    }
+
+
+	    function EducationGDPPPResponseHandler(response) {
+
+	      var data = response.getDataTable();
+
+	      var options = {
+	        title: 'Education Spending per person ' +
+	               'and GDP per person (2012-2016)',
+	        hAxis: {title: 'Education Spending Per Person'},
+	        vAxis: {title: 'Gdp Per Person'},
+	        bubble: {textStyle: {fontSize: 10,auraColor: 'none'}}      };
+
+	      var chart = new google.visualization.BubbleChart(document.getElementById('EducationGDP_PP_div'));
+	      chart.draw(data, options);
+	    }
+   </script>
+
+</html>
